@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>sctmp3 — SoundCloud → MP3</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel-2: #1e222b;
+    --line: #2a2f3a;
+    --text: #e8eaed;
+    --muted: #9aa3b2;
+    --accent: #ff5500;
+    --accent-2: #ff7a33;
+    --ok: #35c46a;
+    --err: #ff5b5b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(1200px 600px at 50% -10%, #1b1f29, var(--bg));
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12vh 20px 40px;
+  }
+  .wrap { width: 100%; max-width: 620px; }
+  h1 {
+    font-size: 28px; font-weight: 700; margin: 0 0 6px;
+    letter-spacing: -0.5px;
+  }
+  h1 span { color: var(--accent); }
+  .sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  .bar {
+    display: flex; gap: 10px; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 14px; padding: 8px;
+  }
+  input[type=text] {
+    flex: 1; background: transparent; border: 0; outline: 0;
+    color: var(--text); font-size: 15px; padding: 12px 14px;
+  }
+  input::placeholder { color: #6b7280; }
+  button {
+    border: 0; cursor: pointer; font-weight: 600; font-size: 15px;
+    color: #fff; background: linear-gradient(180deg, var(--accent-2), var(--accent));
+    padding: 0 22px; border-radius: 10px; transition: filter .15s, opacity .15s;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: default; }
+  .opts { display: flex; align-items: center; gap: 16px; margin: 14px 2px 0; font-size: 13px; color: var(--muted); }
+  .opts label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .card {
+    margin-top: 22px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 16px; display: none; gap: 16px; align-items: center;
+  }
+  .card.show { display: flex; }
+  .card img { width: 76px; height: 76px; border-radius: 10px; object-fit: cover; background: var(--panel-2); flex: none; }
+  .card .meta { flex: 1; min-width: 0; }
+  .card .t { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .card .u { color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .card .dl {
+    flex: none; padding: 10px 18px; border-radius: 10px; font-size: 14px;
+    background: linear-gradient(180deg, var(--accent-2), var(--accent));
+  }
+  .status { margin-top: 16px; font-size: 14px; min-height: 20px; }
+  .status.err { color: var(--err); }
+  .status.ok { color: var(--ok); }
+  .spin {
+    display: inline-block; width: 14px; height: 14px; margin-right: 8px;
+    border: 2px solid rgba(255,255,255,.25); border-top-color: #fff;
+    border-radius: 50%; animation: sp .7s linear infinite; vertical-align: -2px;
+  }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  .foot { margin-top: 34px; color: #5b6474; font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>sctmp3<span>.</span></h1>
+  <div class="sub">Paste a SoundCloud track or playlist link. High-quality MP3, artwork + tags embedded. No ads, no limits.</div>
+
+  <div class="bar">
+    <input id="url" type="text" placeholder="https://soundcloud.com/artist/track" autocomplete="off" spellcheck="false" />
+    <button id="go">Convert</button>
+  </div>
+
+  <div class="opts">
+    <label><input type="radio" name="q" value="320" checked /> 320 kbps</label>
+    <label><input type="radio" name="q" value="128" /> 128 kbps</label>
+  </div>
+
+  <div class="card" id="card">
+    <img id="thumb" alt="" />
+    <div class="meta">
+      <div class="t" id="ctitle"></div>
+      <div class="u" id="cuploader"></div>
+    </div>
+    <button class="dl" id="dl">Download</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="foot">Local personal tool · respect artists &amp; copyright</div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const urlEl = $("#url"), goEl = $("#go"), statusEl = $("#status"), cardEl = $("#card");
+
+function q() { return document.querySelector('input[name=q]:checked').value; }
+function setStatus(msg, cls = "") { statusEl.className = "status " + cls; statusEl.innerHTML = msg; }
+
+async function preview() {
+  const url = urlEl.value.trim();
+  if (!url) return;
+  cardEl.classList.remove("show");
+  setStatus('<span class="spin"></span>Fetching track info…');
+  goEl.disabled = true;
+  try {
+    const r = await fetch("/api/info", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || "Could not read that link");
+    $("#thumb").src = j.thumbnail || "";
+    $("#ctitle").textContent = j.title || "Untitled";
+    $("#cuploader").textContent = (j.uploader || "") + (j.isPlaylist ? ` · ${j.count} tracks` : "");
+    cardEl.classList.add("show");
+    setStatus("");
+  } catch (e) {
+    setStatus(e.message, "err");
+  } finally {
+    goEl.disabled = false;
+  }
+}
+
+function download() {
+  const url = urlEl.value.trim();
+  if (!url) return;
+  setStatus('<span class="spin"></span>Converting… this can take a moment for playlists.');
+  const dl = "/api/download?q=" + q() + "&url=" + encodeURIComponent(url);
+  // Use a hidden iframe so we can keep the page state; browser handles the file save.
+  let f = $("#dlframe");
+  if (!f) { f = document.createElement("iframe"); f.id = "dlframe"; f.style.display = "none"; document.body.appendChild(f); }
+  f.src = dl;
+  // We can't reliably detect completion of a download via iframe; give friendly guidance.
+  setTimeout(() => setStatus("Download started — check your browser downloads.", "ok"), 2500);
+}
+
+goEl.addEventListener("click", preview);
+urlEl.addEventListener("keydown", (e) => { if (e.key === "Enter") preview(); });
+$("#dl").addEventListener("click", download);
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<sctmp3app-arm64-apple-macosx-release.exe>","<sctmp3app-arm64-apple-macosx-release.module>"]
+  "sctmp3app-arm64-apple-macosx-release.exe": ["<sctmp3app-arm64-apple-macosx-release.exe>"]
+  "sctmp3app-arm64-apple-macosx-release.module": ["<sctmp3app-arm64-apple-macosx-release.module>"]
+  "test": ["<sctmp3app-arm64-apple-macosx-release.exe>","<sctmp3app-arm64-apple-macosx-release.module>"]
+default: "main"
+nodes:
+  "/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/App.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Components.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/ContentView.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Downloader.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Models.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Waveform.swift"]
+    outputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/sources"]
+    description: "Write auxiliary file /Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/sources"
+
+  "/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/App.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Components.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/ContentView.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Downloader.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Models.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Waveform.swift.o"]
+    outputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.product/Objects.LinkFileList"
+
+  "/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt"
+
+  "<sctmp3app-arm64-apple-macosx-release.exe>":
+    tool: phony
+    inputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app"]
+    outputs: ["<sctmp3app-arm64-apple-macosx-release.exe>"]
+
+  "<sctmp3app-arm64-apple-macosx-release.module>":
+    tool: phony
+    inputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/App.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Components.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/ContentView.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Downloader.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Models.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Waveform.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/Modules/sctmp3app.swiftmodule"]
+    outputs: ["<sctmp3app-arm64-apple-macosx-release.module>"]
+
+  "C.sctmp3app-arm64-apple-macosx-release.exe":
+    tool: shell
+    inputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/App.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Components.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/ContentView.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Downloader.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Models.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Waveform.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.product/Objects.LinkFileList"]
+    outputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app"]
+    description: "Linking ./.build/arm64-apple-macosx/release/sctmp3app"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release","-o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app","-module-name","sctmp3app","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_sctmp3app_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.product/Objects.LinkFileList","-target","arm64-apple-macosx26.0","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g"]
+
+  "C.sctmp3app-arm64-apple-macosx-release.module":
+    tool: shell
+    inputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/App.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Components.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/ContentView.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Downloader.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Models.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/Waveform.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/swift-version--58304C5D6DBC2206.txt","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/sources"]
+    outputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/App.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Components.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/ContentView.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Downloader.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Models.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/Waveform.swift.o","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/Modules/sctmp3app.swiftmodule"]
+    description: "Compiling Swift Module 'sctmp3app' (6 sources)"
+    args: ["/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","sctmp3app","-emit-dependencies","-emit-module","-emit-module-path","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/Modules/sctmp3app.swiftmodule","-output-file-map","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/output-file-map.json","-whole-module-optimization","-num-threads","8","-c","@/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app.build/sources","-I","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx26.0","-whole-module-optimization","-num-threads","8","-serialize-diagnostics","-O","-j8","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","sctmp3app_main","-swift-version","5","-plugin-path","/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-F","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-g","-Xcc","-isysroot","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk","-Xcc","-F","-Xcc","/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g","-package-name","mac"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/marcusarocha/Projects/Code/sctmp3/mac/Sources/sctmp3app/","/Users/marcusarocha/Projects/Code/sctmp3/mac/Package.swift","/Users/marcusarocha/Projects/Code/sctmp3/mac/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/marcusarocha/Projects/Code/sctmp3/mac/.build/arm64-apple-macosx/release/sctmp3app'
+relocations:     []
+...
